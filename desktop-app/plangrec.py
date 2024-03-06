@@ -1,7 +1,7 @@
-from tkinter import Tk, END, E, W, ttk, StringVar
+from tkinter import Tk, END, E, W, ttk, StringVar, BooleanVar, NORMAL, DISABLED
 from tkinter.ttk import Button, Combobox, Entry, LabelFrame, Treeview, Style
 
-from configuration import LANGUAGES, PROGRAM_EXAMPLES
+from configuration import PROGRAM_EXAMPLES, LANGUAGES
 from model import predict
 
 
@@ -27,7 +27,8 @@ def sort_string(table, column, asc):
     table.heading(column, command=lambda: sort_string(table, column, not asc))
 
 
-def main():
+def main() -> None:
+    """Creates the main window and runs the application"""
     # Main window
     mw = Tk()
     mw.title("Source Code Language Identification")
@@ -48,7 +49,8 @@ def main():
     cmb.current(0)  # Default pick
 
     # Entry inside LabelFrame to visualize the line picked or insert a new one
-    line = Entry(query_frame, font=('Courier', 10))
+    line_var = StringVar()
+    line = Entry(query_frame, font=('Courier', 10), textvariable=line_var)
     line.grid(row=2, column=0, columnspan=2, padx=5, pady=(5, 0), sticky=W + E)
     line.focus()
     line.insert(0, PROGRAM_EXAMPLES[cmb.get()])  # Visualize the line picked
@@ -67,10 +69,31 @@ def main():
         for data in predictions:
             results_tree.insert(parent="", index=0, values=data)
 
+    # When the text of the entry box is modified, the language is predicted
+    line_var.trace_add("write", lambda a, b, c: get_prediction())
+
+    # Checkbox to enable/disable the Predict button
+    predict_as_typing_var = BooleanVar()
+    predict_as_typing_checkbox = ttk.Checkbutton(query_frame, text="Predict language while typing",
+                                                 variable=predict_as_typing_var)
+    predict_as_typing_checkbox.grid(row=3, column=0, columnspan=2, padx=(10, 0), pady=(10, 0), sticky=W + E)
+
     # Button inside LabelFrame to send query to model
-    Button(query_frame, text="Predict", padding=[20, 5], command=get_prediction).grid(row=3, columnspan=2, padx=5, pady=(35, 5), sticky=W + E)
+    predict_button = Button(query_frame, text="Predict", padding=[20, 5], command=get_prediction)
+    predict_button.grid(row=4, columnspan=2, padx=5, pady=(35, 5), sticky=W + E)
     results_frame = LabelFrame(mw, text="Results")
     results_frame.grid(row=0, column=3, rowspan=4, padx=(0, 10), pady=10, sticky=W + E)
+
+    # Function to enable/disable the Predict button based on checkbox state
+    def update_button_state(*args):
+        if predict_as_typing_var.get():
+            predict_button["state"] = DISABLED
+        else:
+            predict_button["state"] = NORMAL
+
+    # Trace changes in the checkbox state and call the update_button_state function
+    predict_as_typing_var.trace_add("write", update_button_state)
+
 
     results_tree = Treeview(results_frame, columns=("lang", "probability"), show="headings", height=6)
     results_tree.grid(row=4, column=0, padx=5, pady=5, sticky=W + E)
@@ -86,7 +109,7 @@ def main():
     # Configure the Treeview to use the vertical scrollbar
     results_tree.configure(yscrollcommand=vsb_results.set)
     # Loads into memory the first prediction
-    get_prediction()
+    #kkk get_prediction()
     # run the main loop
     mw.mainloop()
 

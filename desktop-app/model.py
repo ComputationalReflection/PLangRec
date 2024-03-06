@@ -1,8 +1,8 @@
 import tensorflow as tf
 
-MODEL_PATH: str = 'models/BRNN'
+MODEL_PATH: str = 'model/BRNN'
 # Loads the model into memory at startup to go faster upon prediction
-model = tf.keras.models.load_model(MODEL_PATH)
+#kkk model = tf.keras.models.load_model(MODEL_PATH)
 
 def parse_line(line):
     result = list(line) # Split line in characters
