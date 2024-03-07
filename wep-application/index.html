@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>PLangRec</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Francisco Ortin">
+	<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
+	<link href="css/sticky-footer.css" rel="stylesheet">  <!-- footer taken from bootstrap examples --> 
+	<!-- CodeMirror -->
+	<link rel="stylesheet" href="codemirror/codemirror.css">
+</head>
+
+  <body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container">
+		  <a class="navbar-brand" href="#">
+			<img src="img/logo.png" width="32" height="32" class="d-inline-block align-top" alt="logo">
+			<span><i>PLangRec</i></span>
+		  </a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+  
+		  <div class="collapse navbar-collapse" id="navbarMenu">
+			<ul class="navbar-nav mr-auto">
+			</ul>
+			<ul class="navbar-nav"><li>
+			  <li class="nav-item active">
+				<a class="nav-link" href="#">Recognize</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="https://github.com/ComputationalReflection/ProgQueryWeb">Source Code</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="https://reflection.uniovi.es/ortin/theses/oscar.pdf">Documentation</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="https://www.reflection.uniovi.es/bigcode/download/2020/ieee-access/">Download</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="https://www.reflection.uniovi.es">Computational Reflection</a>
+			  </li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+
+	<br/>
+
+	  <div id="bodyDiv" class="container mt-4" role="main"> 
+
+		<h1 class="display-4">
+			<i>PLangRec</i>
+		</h1>
+		<p class="text-secondary" style="font-size:1.5em;"><i>Character-level model to recognize the programming language from source code</i></p>
+		
+
+		<div id="analysisRowDiv" class="row pt-4"> 
+
+		  <div id="leftDiv" class="col-lg-6">
+			<h2 class="p-3 col-10 text-center">Java Program</h2>
+			<div class="row row-cols-1 mb-3"> 
+				<label class="col-4 col-form-label">Java application: </label>
+					<select name="project-type" id="projectType" class="form-select col-7" onchange="optionSelected(this)">
+						<option value="file">Java file</option>
+						<option value="zip">Java project (zip/jar)</option>
+						<option value="url">GitHub URL</option>
+					</select>
+			</div> <!-- row -->
+
+			<div id="javaFileDiv" class="row row-cols-1"> 
+				<label class="col-12 col-form-label">Enter the Java source code:</label>
+				<textarea id="source-code" name="source-code" class="form-control col-11" rows="10" placeholder="Paste your Java source code here...">
+				</textarea>
+			</div> <!-- javaFileDiv -->
+
+			<div id="javaZipDiv" style="display: none;"> 
+				<div class="row row-cols-1"> 
+					<label class="col-4 col-form-label">Zip/Jar file:</label>
+					<input class="col-7 form-control" type="file" id="zipJarFile" accept=".zip,.jar">
+				</div> <!-- row -->
+				<div class="row row-cols-1"> 
+					<label class="col-4 col-form-label">Compiler options:</label>
+					<input type="text" class="col-7 col-form-control" id="compilerOptionsText" placeholder="Enter the compiler options (if any)">
+				</div> <!-- row -->
+			</div> <!-- javaZipDiv -->
+
+			<div id="gitHubDiv" style="display: none;" class="row row-cols-1"> 
+				<label class="col-4 col-form-label">GitHub URL:</label>
+				<input class="col-7 col-form-control" type="text" id="gitHubURL" placeholder="Enter the GitHub URL">
+  			</div> <!-- javaZipDiv -->
+		  </div> <!-- leftDiv -->
+
+
+		  <div id="rightDiv" class="col-lg-6">
+			<h2 class="p-3 col-11 text-center">Analysis</h2>
+			
+			<div id="searchAnalysisDiv" class="row row-cols-1 mb-4"> 
+				<label class="col-5 col-form-label">Search for an analysis:</label>
+				<input class="col-7 col-form-control" type="text" id="searchAnalysisText" placeholder="Enter the name of an existing analysis">
+			</div> <!-- searchAnalysisDiv -->
+
+			<div id="analysisDiv"> 
+				<div class="row row-cols-1">
+					<label class="form-label col-12">Or enter its Cypher code:</label>
+				</div> <!-- row -->
+				<div class="row row-cols-1">
+					<textarea id="cypherText" name="cypherText" class="form-control col-12" rows="10" ng-model="source.code" placeholder="Write your Cypher query here...">
+// Write your Cypher query/analysis here
+
+MATCH (:TYPE_DEF)-[:DECLARES_METHOD]->(method)
+     -[:CALLS]->(invocation)-[:HAS_DEF]->(methodDef)
+WHERE methodDef.fullyQualifiedName =
+                   'java.lang.Enum:ordinal()int'
+RETURN 'Warning [CMU-DEC56]: you should not attach ' + 
+       'significance to the ordinal of an enum ' +
+	   '(line ' + invocation.lineNumber + ').'
+					</textarea>
+				</div> <!-- row -->
+			</div> <!-- analysisDiv -->
+
+		  </div> <!-- rightDiv -->
+
+	  	</div> <!-- analysisRowDiv -->
+
+	  	<div id="buttonRowDiv" class="row row-cols-1 mt-4 mb-4">
+	 	  <button type="button" class="btn btn-primary btn-lg" onclick="buttonClicked()">Predict Language</button>
+	  	</div> <!-- buttonRowDiv -->
+
+		<div id="resultRowDiv" style="display: none;"> 
+			<div class="row row-cols-1">
+			  <label>Result of the analysis:</label>
+			</div> <!-- row -->
+			<div class="row row-cols-1">
+			  <textarea disabled id="resultText" name="resultText" class="form-control col-lg-12" rows="10" ng-model="source.code">Here you can see the result of the query.
+			  </textarea>
+			</div> <!-- row -->
+		</div> <!-- resultRowDiv -->
+
+	  </div> <!-- bodyDiv -->
+
+
+	  <footer class="footer">
+		<div class="container">
+		  <span class="text-muted">&copy; 2024 Copyright: <a href="https://www.reflection.uniovi.es">Computational Reflection</a> Research Group, <a href="https://www.uniovi.es/en">University of Oviedo</a></span>
+		</div>
+	  </footer>
+
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <script src="bootstrap/js/docs.min.js"></script>
+  <script src="codemirror/codemirror.js"></script>
+  <script src="codemirror/clike.js"></script>
+  <script src="codemirror/cypher.js"></script>
+
+  </body>
+
+<script>
+	function optionSelected(selected) {
+		document.getElementById("javaFileDiv").style.display = selected.value==="file" ? 'block' :' none';
+		document.getElementById("javaZipDiv").style.display = selected.value==="zip" ? 'block' :' none';
+		document.getElementById("gitHubDiv").style.display = selected.value==="url" ? 'block' :' none';
+	}
+	function buttonClicked() {
+		document.getElementById("resultRowDiv").style.display = document.getElementById("resultRowDiv").style.display === 'none' ? 'block': 'none';
+	}
+    var editor = CodeMirror.fromTextArea(document.getElementById("source-code"), {
+      lineNumbers: true,
+      mode: "text/x-java",
+      matchBrackets: true
+    });
+    var editor = CodeMirror.fromTextArea(document.getElementById("cypherText"), {
+      lineNumbers: true,
+      mode: "application/x-cypher-query",
+      matchBrackets: true
+    });
+  </script>
+
+</html>
