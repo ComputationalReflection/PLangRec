@@ -2,9 +2,8 @@ from typing import Dict
 import numpy as np
 import tensorflow as tf
 
-MODEL_PATH: str = 'model/BRNN'
 # Loads the model into memory at startup to go faster upon prediction
-model = tf.keras.models.load_model(MODEL_PATH)
+model = tf.keras.models.load_model('../model/BRNN')
 
 
 def parse_line(line, allow_short_lines: bool):
@@ -48,6 +47,7 @@ def soft_voting(predictions):
 
 def predict(source_code: str) -> Dict[str, float]:
     from configuration import LANGUAGES
+    global model
     lines = source_code.split('\n')
     result = {}
     parsed_lines = [parse_line(line, allow_short_lines=False) for line in lines
@@ -59,3 +59,5 @@ def predict(source_code: str) -> Dict[str, float]:
     for i, p in enumerate(single_prediction):
         result[LANGUAGES[i]] = round(p*100, 2)
     return result
+
+

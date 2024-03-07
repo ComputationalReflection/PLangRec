@@ -1,30 +1,30 @@
-from tkinter import Tk, END, E, W, ttk, StringVar, BooleanVar, NORMAL, DISABLED, Text
+from tkinter import Tk, END, E, W, ttk, StringVar, BooleanVar, NORMAL, DISABLED, Text, Event
 from tkinter.ttk import Button, Combobox, LabelFrame, Treeview, Style
 
 from configuration import PROGRAM_EXAMPLES, LANGUAGES
 from model import predict
 
 
-def sort_number(table, column, asc):
-    rows = [(table.set(item, column), item) for item in table.get_children()]
-    rows.sort(reverse=asc)
+def sort_number(table: Treeview, column_name: str, ascending: bool) -> None:
+    """Sorts the table tree view by prediction probability"""
+    rows = [(table.set(item, column_name), item) for item in table.get_children()]
+    rows.sort(reverse=ascending)
 
     # rearrange items in sorted positions
     for index, (values, item) in enumerate(rows):
         table.move(item, '', index)
 
-    table.heading(column, command=lambda: sort_number(table, column, not asc))
+    table.heading(column_name, command=lambda: sort_number(table, column_name, not ascending))
 
 
-def sort_string(table, column, asc):
-    rows = [(table.set(item, column).lower(), item) for item in table.get_children()]
+def sort_string(table: Treeview, column_name: str, asc: bool) -> None:
+    """Sorts the table tree view by language name"""
+    rows = [(table.set(item, column_name).lower(), item) for item in table.get_children()]
     rows.sort(reverse=asc)
-
     # rearrange items in sorted positions
     for index, (values, item) in enumerate(rows):
         table.move(item, '', index)
-
-    table.heading(column, command=lambda: sort_string(table, column, not asc))
+    table.heading(column_name, command=lambda: sort_string(table, column_name, not asc))
 
 
 def main() -> None:
@@ -32,7 +32,7 @@ def main() -> None:
     # Main window
     mw = Tk()
     mw.title("Source Code Language Identification")
-    mw.geometry("600x240")
+    mw.geometry("700x240")
     mw.resizable(False, False)
     mw.columnconfigure(0, weight=1)
     style = Style()
@@ -54,7 +54,7 @@ def main() -> None:
     text.grid(row=2, column=0, columnspan=2, padx=5, pady=(5, 0), sticky=W + E)
 
     # Function to update StringVar when the text in the Text widget changes
-    def update_text_var(*_):
+    def update_text_var(*_) -> None:
         text_var.set(text.get("1.0", "end-1c"))
 
     # Trace changes in the Text widget and call the update_text_var function
@@ -69,13 +69,13 @@ def main() -> None:
     text.insert("1.0", PROGRAM_EXAMPLES[cmb.get()])  # Visualize the text picked
 
     # Event on select new predefined text in Combobox
-    def select_lang(_):
-        text.delete(0, END)
-        text.insert(0, PROGRAM_EXAMPLES[cmb.get()])
+    def select_lang(_: Event) -> None:
+        text.delete("1.0", END)
+        text.insert(END, PROGRAM_EXAMPLES[cmb.get()])
 
     cmb.bind("<<ComboboxSelected>>", select_lang)
 
-    def get_prediction():
+    def get_prediction() -> None:
         for item in results_tree.get_children():
             results_tree.delete(item)
         predictions = sorted(predict(text.get("1.0", END)).items(), key=lambda x: x[1])
@@ -97,7 +97,7 @@ def main() -> None:
     results_frame.columnconfigure(0, weight=1)
 
     # Function to enable/disable the Predict button based on checkbox state
-    def update_button_state(*_):
+    def update_button_state(*_) -> None:
         if predict_while_typing_var.get():
             predict_button["state"] = DISABLED
         else:
@@ -112,7 +112,8 @@ def main() -> None:
     results_tree.column("lang", width=100)
     results_tree.column("probability", width=100)
     results_tree.heading("lang", text="Language", command=lambda: sort_string(results_tree, "lang", False))
-    results_tree.heading("probability", text="Prob. (%)", command=lambda: sort_number(results_tree, "accuracy", False))
+    results_tree.heading("probability", text="Prob. (%)",
+                         command=lambda: sort_number(results_tree, "probability", False))
 
     # Create a vertical scrollbar for results_tree
     vsb_results = ttk.Scrollbar(results_frame, orient="vertical", command=results_tree.yview)
@@ -122,7 +123,7 @@ def main() -> None:
 
     # When the text of the entry box is modified, the language is predicted
     # if the "predict while typing" checkbox is enabled
-    def text_changed():
+    def text_changed() -> None:
         if predict_while_typing_var.get():
             get_prediction()
     # Trace changes in the StringVar and call on_text_change function
