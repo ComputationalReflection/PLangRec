@@ -5,8 +5,6 @@
 <img alt="Code size" src="https://img.shields.io/github/languages/code-size/ComputationalReflection/PLangRec">
 <img alt="Repo size" src="https://img.shields.io/github/repo-size/ComputationalReflection/PLangRec">
 
-*Programming language recognizer.*
-
 *PLangRec* is a character-level deep model to recognize the programming language of source code.
 
 *PLangRec* is provided as a Python desktop application, web API and web application.
