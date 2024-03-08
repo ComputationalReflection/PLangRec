@@ -1,11 +1,11 @@
 # *PLangRec*
 
-[![License](https://img.shields.io/github/license/ComputationalReflection/PLangRec)](LICENSE)
+[![License](https://img.shields.io/github/license/ComputationalReflection/plangrec)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/computationalreflection/plangrec?include_prereleases)](https://github.com/ComputationalReflection/PLangRec/releases)
 <img alt="Code size" src="https://img.shields.io/github/languages/code-size/ComputationalReflection/PLangRec">
 <img alt="Repo size" src="https://img.shields.io/github/repo-size/ComputationalReflection/PLangRec">
 
-*Programming language recognizer*
+*Programming language recognizer.*
 
 *PLangRec* is a character-level deep model to recognize the programming language of source code.
 
