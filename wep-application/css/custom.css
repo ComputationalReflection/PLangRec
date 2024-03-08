@@ -1,0 +1,14 @@
+/* Bootstrap's styles customization
+-------------------------------------------------- */
+.display-4 {
+    color: #0000aa; /* Red color, replace with your desired color */
+}
+
+
+th, td {
+    text-align: center;
+}
+
+th {
+    cursor: pointer;
+}
