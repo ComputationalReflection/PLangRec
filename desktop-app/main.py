@@ -1,8 +1,7 @@
 from tkinter import Tk, END, E, W, ttk, StringVar, BooleanVar, NORMAL, DISABLED, Text, Event
 from tkinter.ttk import Button, Combobox, LabelFrame, Treeview, Style
-
-from configuration import PROGRAM_EXAMPLES, LANGUAGES
-from model import predict
+from example_code import PROGRAM_EXAMPLES
+from languages import LANGUAGES
 
 
 def sort_number(table: Treeview, column_name: str, ascending: bool) -> None:
@@ -25,6 +24,16 @@ def sort_string(table: Treeview, column_name: str, asc: bool) -> None:
     for index, (values, item) in enumerate(rows):
         table.move(item, '', index)
     table.heading(column_name, command=lambda: sort_string(table, column_name, not asc))
+
+
+def import_model() -> None:
+    """Imports the model component from a sibling directory"""
+    import os
+    import sys
+    if not os.path.exists("../common/model.py"):
+        print("You need to include the common directory as a sibling directory of 'web-api'.", file=sys.stderr)
+        sys.exit(-1)
+    sys.path.append('../common')
 
 
 def main() -> None:
@@ -76,9 +85,10 @@ def main() -> None:
     cmb.bind("<<ComboboxSelected>>", select_lang)
 
     def get_prediction() -> None:
+        import model
         for item in results_tree.get_children():
             results_tree.delete(item)
-        predictions = sorted(predict(text.get("1.0", END)).items(), key=lambda x: x[1])
+        predictions = sorted(model.predict(text.get("1.0", END)).items(), key=lambda x: x[1])
         for data in predictions:
             results_tree.insert(parent="", index=0, values=data)
 
@@ -136,4 +146,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    import_model()
     main()

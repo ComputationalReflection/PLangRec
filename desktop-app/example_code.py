@@ -1,12 +1,3 @@
-from tkinter import Tk, END, E, W
-from tkinter.ttk import Button, Combobox, Entry, LabelFrame, Treeview, Style
-
-from model import predict
-
-LANGUAGES = ["Assembly", "C", "C++", "C#", "CSS", "Go", "HTML", "Java", "JavaScript", "Kotlin",
-                   "Matlab", "Perl", "PHP", "Python", "R", "Ruby", "Scala", "SQL", "Swift", "TypeScript",
-                   "Unix Shell"]
-
 PROGRAM_EXAMPLES = {
     "Assembly": "ADD CX, [BX+SI*2+10]",
     "C": "int *numbers = malloc(sizeof(int));",

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
 	<title>PLangRec</title>
@@ -10,8 +10,6 @@
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/custom.css">
 	<link href="css/sticky-footer.css" rel="stylesheet">  <!-- footer taken from bootstrap examples --> 
-	<!-- CodeMirror -->
-	<!-- <link rel="stylesheet" href="codemirror/codemirror.css"> -->
 </head>
 
   <body>
@@ -103,7 +101,9 @@
 
 			<div id="javaFileDiv" class="row row-cols-1"> 
 				<label class="col-12 col-form-label">Source code:</label>
-				<textarea id="source-code" name="source-code" class="form-control col-11" rows="10" placeholder="Write your source code here...">
+				<textarea id="source-code" name="source-code" class="form-control col-11" rows="10"
+						  placeholder="Write your source code here..."
+						  oninput="sourceCodeChanged()">
 				</textarea>
 			</div> <!-- javaFileDiv -->
 
@@ -115,21 +115,18 @@
 
 
 		  <div id="rightDiv" class="col-lg-6">
-			<h2 class="p-3 col-11 text-center">Results</h2>
+			<h2 class="p-3 col-11 text-center">Programming Language</h2>
 
 			<div id="resultsDiv" class="row row-cols-1 mb-4">
 				<table id="resultsTable" class="table table-bordered table-hover">
-					<thead class="thead-dark">
+					<thead class="thead-light">
 						<tr>
 							<th onclick="sortTable(0)">Language</th>
 							<th onclick="sortTable(1)">Probability</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr> <td>Assembly</td> <td>1.0</td> </tr>
-						<tr> <td>Python</td> <td>0.75</td> </tr>
-						<tr> <td>JavaScript</td> <td>0.85</td> </tr>
-						<!-- Add more rows as needed -->
+						<!-- The results table is dynamically loaded -->
 					</tbody>
 				</table>
 			</div> <!-- resultsDiv -->
@@ -152,15 +149,11 @@
   <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="bootstrap/js/bootstrap.min.js"></script>
-  <!-- <script src="bootstrap/js/docs.min.js"></script> -->
-  <!-- <script src="codemirror/codemirror.js"></script> -->
-  <!-- <--script src="codemirror/clike.js"></--script> -->
-  <!-- <script src="codemirror/cypher.js"></script> -->
 
   </body>
 
 <script>
-	function optionSelected(selected) {
+	function selectExampleLanguage(language) {
 		const example_code = {
 			"Assembly": "ADD CX, [BX+SI*2+10]",
 			"C": "int *numbers = malloc(sizeof(int));",
@@ -184,11 +177,33 @@
 			"TypeScript": "let ourTuple: [number, boolean, string];",
 			"Unix Shell": "echo \"Wow, you look younger than $age years old\""
 		};
-		document.getElementById("source-code").value = example_code[selected.value];
+		document.getElementById("source-code").value = example_code[language];
+		sourceCodeChanged();
+	}
+	function optionSelected(selected) {
+		selectExampleLanguage(selected.value);
 	}
 	function buttonClicked() {
-		console.log('Do the prediction...');
-		// DO THE PREDICTION BY CALLING THE WEB SERVICE
+		// do the prediction by calling the web API
+		fetch('http://127.0.0.1:5000/BRNN/predict?source_code=' + document.getElementById("source-code").value)
+			.then(response => response.json())
+			.then(data => {
+				// Handle the response data and populate the HTML table
+				const tableBody = document.querySelector('#resultsTable tbody');
+				tableBody.innerHTML = '';  // removes the table content
+				for (const [language, probability] of Object.entries(data)) {
+					const row = tableBody.insertRow();
+					const cell1 = row.insertCell(0);
+					const cell2 = row.insertCell(1);
+					cell1.textContent = language;
+					cell2.textContent = probability;
+				}
+			// orders the result by probability
+			const table = document.getElementById("resultsTable");
+			table.setAttribute("data-sort-dir", "asc"); // ascending order of probabilities
+			sortTable(1); // sort table by column 2 (probabilities)
+	        })
+        .catch(error => console.error('Error:', error));
 	}
  	function updateButtonState() {
         // Get references to the checkbox and button
@@ -196,20 +211,26 @@
         const button = document.getElementById('predictButton');
         // Enable or disable the button based on the checkbox state
         button.disabled = checkbox.checked;
+		if (checkbox.checked)
+			buttonClicked();
     }
+	function sourceCodeChanged() {
+		// If the "predict while typing" checkbox is selected, then it is like clicking the button when the text changes
+		if (document.getElementById('predict-while-typing').checked)
+			buttonClicked();
+	}
 	function sortTable(columnIndex) {
 		const table = document.getElementById("resultsTable");
-		var rows, switching, i, x, y, shouldSwitch;
 		const direction = table.getAttribute("data-sort-dir") === "asc" ? "desc" : "asc";
 		table.setAttribute("data-sort-dir", direction);
-		switching = true;
+		let switching = true;
 		while (switching) {
 			switching = false;
-			rows = table.getElementsByTagName("tr");
-			for (i = 1; i < (rows.length - 1); i++) {
-				shouldSwitch = false;
-				x = rows[i].getElementsByTagName("td")[columnIndex];
-				y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+			const rows = table.getElementsByTagName("tr");
+			for (var i = 1; i < (rows.length - 1); i++) {
+				var shouldSwitch = false;
+				const x = rows[i].getElementsByTagName("td")[columnIndex];
+				const y = rows[i + 1].getElementsByTagName("td")[columnIndex];
 				if (columnIndex === 0) // Language names
 	         	    shouldSwitch = direction === "asc" ? x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() : x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase();
     			else
@@ -223,6 +244,8 @@
 			}
 		}
 	}
+	// we select assembly as the first example language
+	selectExampleLanguage("Assembly");
 </script>
 
 </html>

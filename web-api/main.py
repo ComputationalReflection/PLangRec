@@ -1,5 +1,8 @@
 import sys
 import logging
+
+from flask_cors import CORS
+
 from services.prediction import brnn_predict_blueprint
 
 from flask import Flask, request, jsonify, Blueprint
@@ -23,8 +26,21 @@ def register_imported_blueprints(app: Flask) -> int:
     return count
 
 
+def import_model() -> None:
+    """Imports the model component from a sibling directory"""
+    import os
+    import sys
+    if not os.path.exists("../common/model.py"):
+        print("You need to include the common directory as a sibling directory of 'web-api'.", file=sys.stderr)
+        sys.exit(-1)
+    sys.path.append('../common')
+    import model  # loads the model into memory
+
+
 def main() -> None:
+    import_model()
     app = Flask(__name__)
+    CORS(app)
     register_imported_blueprints(app)
     app.run(debug=True)  # debug must be False to trace programs in PyCharm
 
