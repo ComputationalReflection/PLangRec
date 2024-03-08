@@ -1,7 +1,6 @@
 from tkinter import Tk, END, E, W, ttk, StringVar, BooleanVar, NORMAL, DISABLED, Text, Event
 from tkinter.ttk import Button, Combobox, LabelFrame, Treeview, Style
 from example_code import PROGRAM_EXAMPLES
-from languages import LANGUAGES
 
 
 def sort_number(table: Treeview, column_name: str, ascending: bool) -> None:
@@ -53,6 +52,7 @@ def main() -> None:
     query_frame.columnconfigure(1, weight=1)
 
     # Combobox inside LabelFrame to pick one predefined text of source code
+    from languages import LANGUAGES
     cmb = Combobox(query_frame, values=LANGUAGES, state="readonly")
     cmb.grid(row=1, column=0, padx=5, pady=(15, 0))
     cmb.current(0)  # Default pick
