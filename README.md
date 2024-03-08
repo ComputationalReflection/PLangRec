@@ -1,6 +1,6 @@
 # *PLangRec*
 
-[![License](https://img.shields.io/github/license/ComputationalReflection/plangrec)](LICENSE)
+[![License](https://img.shields.io/github/license/computationalreflection/plangrec)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/computationalreflection/plangrec?include_prereleases)](https://github.com/ComputationalReflection/PLangRec/releases)
 <img alt="Code size" src="https://img.shields.io/github/languages/code-size/ComputationalReflection/PLangRec">
 <img alt="Repo size" src="https://img.shields.io/github/repo-size/ComputationalReflection/PLangRec">
