@@ -186,7 +186,7 @@
 	}
 	function buttonClicked() {
 		// do the prediction by calling the web API
-		fetch(WEB_SERVER + '/BRNN/predict?source_code=' + document.getElementById("source-code").value)
+		fetch(WEB_SERVER + '/BRNN/predict?source_code=' + encodeURIComponent(document.getElementById("source-code").value))
 			.then(response => response.json())
 			.then(data => {
 				// Handle the response data and populate the HTML table

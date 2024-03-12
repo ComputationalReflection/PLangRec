@@ -14,7 +14,7 @@
 Make sure you have Python installed. Then, install all the required packages:
 
 ``` bash
-    pip install -r requirements.txt --upgrade
+pip install -r requirements.txt --upgrade
 ``` 
 
 Make sure you have downloaded both the both `common` and the `desktop` folders, and they are
@@ -24,8 +24,8 @@ Finally, run *PLangRec* as a Python application (the model will be downloaded fr
 so the first execution may take minutes):
 
 ``` bash
-    cd desktop-app
-    python main.py
+cd desktop-app
+python main.py
 ``` 
 
 ![Desktop application screenshot](img/desktop-app.png)
@@ -35,7 +35,7 @@ so the first execution may take minutes):
 Make sure you have Python installed. Then, install all the required packages:
 
 ``` bash
-    pip install -r requirements.txt --upgrade
+pip install -r requirements.txt --upgrade
 ``` 
 
 Make sure you have downloaded both the both `common` and the `web-api` folders, and they are
@@ -45,8 +45,8 @@ Finally, run *PLangRec* as a Web API (the model will be downloaded from the Inte
 so the first execution may take minutes):
 
 ``` bash
-    cd web-api
-    python main.py
+cd web-api
+python main.py
 ``` 
 
 ## Web application
