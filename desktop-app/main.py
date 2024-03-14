@@ -30,7 +30,7 @@ def import_model() -> None:
     import os
     import sys
     if not os.path.exists("../common/model.py"):
-        print("You need to include the common directory as a sibling directory of 'web-api'.", file=sys.stderr)
+        print("You need to include the 'common' directory as a sibling directory of 'web-api'.", file=sys.stderr)
         sys.exit(-1)
     sys.path.append('../common')
 
