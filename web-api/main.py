@@ -2,10 +2,9 @@ import sys
 import logging
 
 from flask_cors import CORS
-
 from services.prediction import brnn_predict_blueprint
-
 from flask import Flask, request, jsonify, Blueprint
+from waitress import serve
 
 
 def config_logger() -> logging.Logger:
@@ -42,7 +41,7 @@ def main() -> None:
     app = Flask(__name__)
     CORS(app)
     register_imported_blueprints(app)
-    app.run(debug=True)  # debug must be False to trace programs in PyCharm
+    serve(app, host="0.0.0.0", port=8000)
 
 
 if __name__ == '__main__':
