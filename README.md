@@ -65,6 +65,14 @@ The Web application will be ready, calling the Web API.
 
 ![Web application screenshot](img/web-app.png)
 
+## Models
+
+*PLangRec* uses a deep model classifier to predict the programming language from the source code.
+It uses a bidirectional recurrent neural network (BRNN). We have also tried a multi-layer preceptron
+architecture, but the BRNN achieved better performance. 
+The `BRNN` and `MLP` directories included in this repository include the training, validation and evaluation
+of both models.
+
 ## License
 
 [MIT license](LICENSE).
