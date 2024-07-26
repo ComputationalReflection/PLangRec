@@ -15,10 +15,10 @@ In this document, we describe the desktop web API.
 First, install the latest release of Python 3. We have used Python 3.11, so any higher version should work. 
 
 Second, install all the required packages, either using a virtual environment or modifying the system Python.
-The simplest approach to install the required packages is to use the `requirements.txt` file with pip:
+The simplest approach to install the required packages is to use the `web-api-requirements.txt` file with pip:
 
 ``` bash
-pip install -r requirements.txt --upgrade
+pip install -r web-api-requirements.txt --upgrade
 ``` 
 
 Third, place both `common` and the `web-api` folders as sibling directories. 

@@ -44,7 +44,7 @@ For a more detailed description of the desktop Python application, please read [
 Make sure you have Python installed. Then, install all the required packages:
 
 ``` bash
-pip install -r requirements.txt --upgrade
+pip install -r web-api-requirements.txt --upgrade
 ``` 
 
 Download both the both `common` and the `web-api` folders. 
