@@ -69,9 +69,7 @@ by C++. *PLangRec* uses that new line (together with the first one) to now predi
 as the most likely language. We can see that in the following figure:
 
 
-TODO: add web-app-example2.png image the with the following code:
-int **p;
-p = new int*[10];
+![Web application example 2](img/web-app-example-2.png)
 
 
 The more code the user types, the more accurate the prediction will be.

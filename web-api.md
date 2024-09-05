@@ -49,7 +49,7 @@ Let's assume the web API is running in https://www.reflection.uniovi.es/plangrec
 Since the web API only provides a `predict` function through the `GET` HTTP method,
 we can use any web browser to test it 
 ([curl](https://curl.se/) is a widespread application widely used to test web APIs). 
-If we write the following URL [https://www.reflection.uniovi.es/plangrec/webapi/BRNN/predict?source_code=select%20*%20from%20Customers;](https://www.reflection.uniovi.es/plangrec/webapi/BRNN/predict?source_code=select%20*%20fromCustomers;),
+If we write the following URL [https://www.reflection.uniovi.es/plangrec/webapi/BRNN/predict?source_code=select%20*%20from%20Customers;](https://www.reflection.uniovi.es/plangrec/webapi/BRNN/predict?source_code=select%20*%20from%20Customers;),
 we are asking the web API to predict the programming language of code `select * from Customers;`.
 
 This is the JSON response we would get:

@@ -8,7 +8,7 @@
 *PLangRec* is a system designed to recognize the programming language of a source code excerpt. 
 
 *PLangRec* is provided as a Python desktop application, web API and web application.
-In this document, we describe the desktop Python application.
+In this document, we describe the Python desktop application.
 
 ## Installation
 
@@ -45,7 +45,7 @@ Users can input the source code into the text area in the middle of the left han
 They can either type their own code or select examples from different pieces of code 
 for the 21 programming languages supported, using the dropdown list (assembly is the first language). 
 
-When the "predict language" button is clicked, the probabilities for the 21 languages 
+When the "predict" button is clicked, the probabilities for the 21 languages 
 (sorted in descending order) inferred by *PLangRec* are displayed in the "Results" area. 
 Both languages and probabilities can be sorted by clicking on their respective titles. 
 
@@ -69,9 +69,8 @@ by C++. *PLangRec* uses that new line (together with the first one) to now predi
 as the most likely language. We can see that in the following figure:
 
 
-TODO: add desktop-example-2.png image the with the following code:
-int **p;
-p = new int*[10];
+![Desktop application example 2](img/desktop-example-2.png)
+
 
 The more code the user types, the more accurate the prediction will be.
 
